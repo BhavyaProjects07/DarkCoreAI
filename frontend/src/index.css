@@ -1,0 +1,398 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --accent-primary: #00ff88;
+  --accent-secondary: #0088ff;
+  --accent-tertiary: #ff0088;
+  --border-color: #333333;
+  --gradient-primary: linear-gradient(135deg, #00ff88, #0088ff);
+  --gradient-secondary: linear-gradient(135deg, #ff0088, #00ff88);
+  --shadow-glow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --accent-primary: #00b366;
+  --accent-secondary: #0066cc;
+  --accent-tertiary: #cc0066;
+  --border-color: #dee2e6;
+  --gradient-primary: linear-gradient(135deg, #00b366, #0066cc);
+  --gradient-secondary: linear-gradient(135deg, #cc0066, #00b366);
+  --shadow-glow: 0 0 20px rgba(0, 179, 102, 0.2);
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+  }
+}
+
+@keyframes grid-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+@keyframes holographic {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes data-flow {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(180deg);
+  }
+}
+
+@keyframes float-medium {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translateY(-25px) rotate(120deg) scale(1.1);
+  }
+  66% {
+    transform: translateY(-15px) rotate(240deg) scale(0.9);
+  }
+}
+
+@keyframes float-fast {
+  0%,
+  100% {
+    transform: translateX(0px) translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateX(20px) translateY(-20px) rotate(90deg);
+  }
+  50% {
+    transform: translateX(-10px) translateY(-40px) rotate(180deg);
+  }
+  75% {
+    transform: translateX(-20px) translateY(-10px) rotate(270deg);
+  }
+}
+
+@keyframes glass-shimmer {
+  0%,
+  100% {
+    background-position: -200% 0;
+  }
+  50% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slideInUp 0.8s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.8s ease-out;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Utility Classes */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.neon-border {
+  border: 2px solid var(--accent-primary);
+  box-shadow: var(--shadow-glow);
+}
+
+.cyber-grid {
+  background-image: linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 20s linear infinite;
+}
+
+.holographic-effect {
+  background: linear-gradient(
+    45deg,
+    rgba(0, 255, 136, 0.1) 0%,
+    rgba(0, 136, 255, 0.1) 25%,
+    rgba(255, 0, 136, 0.1) 50%,
+    rgba(0, 255, 136, 0.1) 75%,
+    rgba(0, 136, 255, 0.1) 100%
+  );
+  background-size: 400% 400%;
+  animation: holographic 8s ease-in-out infinite;
+}
+
+.data-stream {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-stream::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4), transparent);
+  animation: data-flow 3s linear infinite;
+}
+
+/* Floating glass materials container */
+.floating-materials {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Individual floating glass shapes */
+.glass-material {
+  position: absolute;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 136, 0.1) 0%,
+    rgba(0, 136, 255, 0.08) 50%,
+    rgba(255, 0, 136, 0.06) 100%
+  );
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 255, 136, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-material::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: glass-shimmer 4s ease-in-out infinite;
+}
+
+/* Different sizes and animations for variety */
+.glass-small {
+  width: 60px;
+  height: 60px;
+  animation: float-fast 8s ease-in-out infinite;
+}
+
+.glass-medium {
+  width: 100px;
+  height: 80px;
+  animation: float-medium 12s ease-in-out infinite;
+}
+
+.glass-large {
+  width: 140px;
+  height: 120px;
+  animation: float-slow 16s ease-in-out infinite;
+}
+
+/* Hexagonal glass shapes for AI aesthetic */
+.glass-hex {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background: linear-gradient(45deg, rgba(0, 255, 136, 0.12) 0%, rgba(0, 136, 255, 0.08) 100%);
+}
+
+/* Diamond shapes */
+.glass-diamond {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: linear-gradient(45deg, rgba(255, 0, 136, 0.1) 0%, rgba(0, 255, 136, 0.06) 100%);
+}
+
+/* Positioning classes for scattered placement */
+.pos-1 {
+  top: 10%;
+  left: 15%;
+  animation-delay: 0s;
+}
+.pos-2 {
+  top: 20%;
+  right: 20%;
+  animation-delay: -2s;
+}
+.pos-3 {
+  top: 60%;
+  left: 10%;
+  animation-delay: -4s;
+}
+.pos-4 {
+  top: 70%;
+  right: 15%;
+  animation-delay: -1s;
+}
+.pos-5 {
+  top: 30%;
+  left: 70%;
+  animation-delay: -3s;
+}
+.pos-6 {
+  top: 80%;
+  left: 60%;
+  animation-delay: -5s;
+}
+.pos-7 {
+  top: 15%;
+  left: 50%;
+  animation-delay: -1.5s;
+}
+.pos-8 {
+  top: 45%;
+  right: 30%;
+  animation-delay: -3.5s;
+}
+.pos-9 {
+  top: 85%;
+  right: 45%;
+  animation-delay: -2.5s;
+}
+.pos-10 {
+  top: 5%;
+  right: 60%;
+  animation-delay: -4.5s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+}
