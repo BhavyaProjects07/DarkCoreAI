@@ -140,11 +140,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # -------------------------------------------------
 # Media files
 # -------------------------------------------------
-# The logic for Google Drive uploads is now handled entirely within views.py
-# and reads directly from your .env file. No further configuration is needed here.
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
 
 # -------------------------------------------------
 # Email Settings
@@ -156,6 +153,15 @@ EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
+
+# -------------------------------------------------
+# Google Drive credentials for uploads
+# -------------------------------------------------
+GOOGLE_DRIVE_CLIENT_SECRET_FILE = os.getenv(
+    "GOOGLE_DRIVE_CLIENT_SECRET_FILE",
+    BASE_DIR / "client_secret.json"  # fallback for local dev
+)
+GOOGLE_DRIVE_FOLDER_ID = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
 
 # -------------------------------------------------
 # Default Primary Key Field Type
