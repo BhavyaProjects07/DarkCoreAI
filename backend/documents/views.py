@@ -120,7 +120,7 @@ def get_drive_service():
     Returns Drive service object.
     """
     creds = None
-    client_secret = os.getenv("GOOGLE_CLIENT_SECRET_FILE")
+    client_secret = os.getenv("GOOGLE_DRIVE_CLIENT_SECRET_FILE")
     token_path = os.path.join(settings.BASE_DIR, "token.pickle")
     scopes = ["https://www.googleapis.com/auth/drive.file"]
 
