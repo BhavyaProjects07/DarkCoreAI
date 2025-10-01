@@ -489,3 +489,9 @@ class AudioSummarizeView(APIView):
         except Exception as e:
             return Response({"error": f"Failed to generate audio summary: {str(e)}"}, status=500)
 
+
+# backend/api/views.py
+from django.http import JsonResponse
+
+def ping(request):
+    return JsonResponse({"status": "ok"})

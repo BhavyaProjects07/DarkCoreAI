@@ -1,7 +1,7 @@
 # documents/urls.py
 
 from django.urls import path
-from documents.views import DocumentUploadView, SummarizeView, SummarizeListView, SummarizeChatView,AudioSummarizeView
+from documents.views import DocumentUploadView, SummarizeView, SummarizeListView, SummarizeChatView,AudioSummarizeView,ping
 
 urlpatterns = [
     path("upload/", DocumentUploadView.as_view(), name="upload"),
@@ -9,4 +9,5 @@ urlpatterns = [
     path("summaries/", SummarizeListView.as_view(), name="summaries"),
     path("summaries/<int:session_id>/chat/", SummarizeChatView.as_view(), name="summarization-chat"),
     path("summaries/<int:session_id>/audio/", AudioSummarizeView.as_view(), name="audio-summary"),
+    path("ping/", ping),
 ]
