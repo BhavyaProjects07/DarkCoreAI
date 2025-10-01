@@ -11,6 +11,9 @@ function App() {
   const [theme, setTheme] = useState("dark")
 
   useEffect(() => {
+    fetch("https://darkcoreai.onrender.com/ping/")
+      .then(() => console.log("Backend woken up"))
+      .catch(() => console.warn("Backend wake-up failed"));
     document.documentElement.setAttribute("data-theme", theme)
     document.body.setAttribute("data-theme", theme)
 
