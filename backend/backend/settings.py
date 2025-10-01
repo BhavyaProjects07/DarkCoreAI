@@ -22,7 +22,7 @@ ALLOWED_HOSTS = ["*"]  # Render will inject its own domain
 # -------------------------------------------------
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173"
+    "http://localhost:5173",
     "https://darkcoreai.vercel.app",
 ]
 CORS_ALLOW_CREDENTIALS = True
