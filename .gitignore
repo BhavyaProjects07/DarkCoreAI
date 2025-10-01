@@ -68,3 +68,4 @@ Thumbs.db
 *.log
 test.env
 token.pickle
+backend/script.py

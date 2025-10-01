@@ -20,7 +20,7 @@ from rest_framework import status, permissions
 # ---- Google OAuth Drive ----
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload,MediaIoBaseDownload,MediaInMemoryUpload
+from googleapiclient.http import MediaFileUpload,MediaIoBaseDownload,MediaInMemoryUpload,MediaIoBaseUpload
 from google.auth.transport.requests import Request
 
 # ---- Gemini ----
@@ -34,30 +34,35 @@ from .serializers import DocumentSerializer, SummarizationSessionSerializer, Sum
 
 
 
-def upload_file_to_drive(file_path_or_buffer, filename, mimetype='application/octet-stream'):
+def upload_file_to_drive(file_path_or_buffer, filename, mimetype="application/octet-stream"):
     """
-    Uploads a file (from a local path or an in-memory buffer) to Google Drive.
+    Uploads a file to Google Drive (from local path or in-memory buffer).
     """
     service = get_drive_service()
-    parent_folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
-    if not parent_folder_id:
-        raise Exception("GOOGLE_DRIVE_FOLDER_ID is not set in .env")
+    folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
+    if not folder_id:
+        raise RuntimeError("GOOGLE_DRIVE_FOLDER_ID is not set in environment")
 
-    metadata = {"name": filename, "parents": [parent_folder_id]}
+    metadata = {"name": filename, "parents": [folder_id]}
     
-    if isinstance(file_path_or_buffer, str): # It's a file path
+    if isinstance(file_path_or_buffer, str):  # file path
         media = MediaFileUpload(file_path_or_buffer, mimetype=mimetype, resumable=True)
-    else: # It's an in-memory buffer (BytesIO)
-        media = MediaInMemoryUpload(file_path_or_buffer.read(), mimetype=mimetype)
+    else:  # in-memory buffer (BytesIO)
+        if isinstance(file_path_or_buffer, BytesIO):
+            file_path_or_buffer.seek(0)
+        media = MediaIoBaseUpload(file_path_or_buffer, mimetype=mimetype, resumable=True)
 
-    file = service.files().create(
-        body=metadata, media_body=media, fields="id, webViewLink, webContentLink"
+    drive_file = service.files().create(
+        body=metadata,
+        media_body=media,
+        fields="id, webViewLink, webContentLink"
     ).execute()
-    return file
+
+    return drive_file
 # ===========================================================
 # 🧠 TEXT EXTRACTION
 # ===========================================================
-def extract_text_from_file(file_content_stream, file_name):
+
     """
     Extracts text directly from an in-memory binary stream (BytesIO)
     for all supported file types.
@@ -114,32 +119,28 @@ def extract_text_from_file(file_content_stream, file_name):
 # ===========================================================
 # 📤 GOOGLE DRIVE UPLOAD (OAuth)
 # ===========================================================
+from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+import os
+
 def get_drive_service():
-    """
-    Authenticate using OAuth (client_secret.json + token.pickle)
-    Returns Drive service object.
-    """
-    creds = None
-    client_secret = os.getenv("GOOGLE_DRIVE_CLIENT_SECRET_FILE")
-    token_path = os.path.join(settings.BASE_DIR, "token.pickle")
     scopes = ["https://www.googleapis.com/auth/drive.file"]
 
-    # Load saved credentials if available
-    if os.path.exists(token_path):
-        with open(token_path, "rb") as token:
-            creds = pickle.load(token)
+    creds = Credentials(
+        token=None,  # access token will be generated dynamically
+        refresh_token=os.getenv("GOOGLE_DRIVE_REFRESH_TOKEN"),
+        client_id=os.getenv("GOOGLE_DRIVE_CLIENT_ID"),
+        client_secret=os.getenv("GOOGLE_DRIVE_CLIENT_SECRET"),
+        token_uri="https://oauth2.googleapis.com/token",
+        scopes=scopes
+    )
 
-    # Refresh or login if needed
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(client_secret, scopes)
-            creds = flow.run_local_server(port=0)
-            with open(token_path, "wb") as token:
-                pickle.dump(creds, token)
+    service = build("drive", "v3", credentials=creds)
+    return service
 
-    return build("drive", "v3", credentials=creds)
+
+
+
 
 def extract_text(file_content_stream, file_name):
     """
@@ -489,9 +490,3 @@ class AudioSummarizeView(APIView):
         except Exception as e:
             return Response({"error": f"Failed to generate audio summary: {str(e)}"}, status=500)
 
-
-# backend/api/views.py
-from django.http import JsonResponse
-
-def ping(request):
-    return JsonResponse({"status": "ok"})

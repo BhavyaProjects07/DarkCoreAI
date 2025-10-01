@@ -160,10 +160,12 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 # -------------------------------------------------
 # Google Drive credentials for uploads
 # -------------------------------------------------
-GOOGLE_DRIVE_CLIENT_SECRET_FILE = os.getenv(
-    "GOOGLE_DRIVE_CLIENT_SECRET_FILE",
-    BASE_DIR / "client_secret.json"  # fallback for local dev
-)
+import os
+
+# Google Drive credentials (from environment variables)
+GOOGLE_DRIVE_CLIENT_ID = os.getenv("GOOGLE_DRIVE_CLIENT_ID")
+GOOGLE_DRIVE_CLIENT_SECRET = os.getenv("GOOGLE_DRIVE_CLIENT_SECRET")
+GOOGLE_DRIVE_REFRESH_TOKEN = os.getenv("GOOGLE_DRIVE_REFRESH_TOKEN")
 GOOGLE_DRIVE_FOLDER_ID = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
 
 # -------------------------------------------------
